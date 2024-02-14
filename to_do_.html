@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap");
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("https://i.pinimg.com/564x/c3/c5/b3/c3c5b3812890672a70d484a20fd6b8e9.jpg");
+  background-repeat: repeat;
+  background-position: center center;
+  background-size: cover;
+
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+
+h1 {
+  color: rgb(179, 131, 226);
+  font-size: 5rem;
+  text-align: center;
+  opacity:.9 ;
+}
+.thought h2{
+  color: rgb(255, 255, 255);
+  opacity: .3;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif ;
+
+}
+form {
+  box-shadow: 5 10px 10px rgba(26, 2, 2, 0.1);
+
+  max-width: 100%;
+  width: 400px;
+}
+
+.input {
+  color: #444;
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  display: block;
+  width: 100%;
+  border-radius: 10px ;
+  border: none;
+}
+
+.input::placeholder {
+  color: #9e6eaa;
+}
+
+.input:focus {
+  outline-color: rgb(179, 131, 226);
+}
+
+.todos {
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  border-radius: 20px;
+}
+
+.todos li {
+  border-top: 1px solid #e5e5e5;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+}
+
+.todos li.completed {
+  color: #b6b6b6;
+  border-radius: 20px;
+  text-decoration: line-through;
+}
+
+small {
+  color: #000000;
+  margin-top: 3rem;
+  text-align: center;
+  opacity: .6;
+}
+</style>    
+<title>To-do List</title>
+  </head>
+  <body>
+    <div class="thought"><p>Get Shit Done &check;</p></div>
+    <h1>To-Do Lissssssssssst<3</h1>
+    
+    <form id="form">
+      <input
+        type="text"
+        class="input"
+        id="input"
+        placeholder="Enter Your Task"
+        autocomplete="off"/>
+
+      <ul class="todos" id="todos"></ul>
+    </form>
+    <p>
+        Left click of your mouse to mark as completed.<br>
+        Right click to delete task</p>
+
+    <script>
+        const form = document.getElementById("form");
+const input = document.getElementById("input");
+const todosList = document.getElementById("todos");
+const todos = JSON.parse(localStorage.getItem("todos"));
+
+const updateLocalStorage = () => {
+  const todosElements = document.querySelectorAll("li");
+  const todos = [];
+  todosElements.forEach((todoElement) => {
+    todos.push({
+      text: todoElement.innerText,
+      completed: todoElement.classList.contains("completed"),
+    });
+  });
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
+
+const addTodo = (todo) => {
+  let todoText = input.value;
+  if (todo) todoText = todo.text;
+  if (todoText) {
+    const todoElement = document.createElement("li");
+    if (todo && todo.completed) {
+      todoElement.classList.add("completed");
+    }
+    todoElement.innerText = todoText;
+    todoElement.addEventListener("click", () => {
+      todoElement.classList.toggle("completed");
+      updateLocalStorage();
+    });
+    todoElement.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+      todoElement.remove();
+      updateLocalStorage();
+    });
+    todosList.appendChild(todoElement);
+    input.value = "";
+    updateLocalStorage();
+  }
+};
+
+if (todos) {
+  todos.forEach((todo) => addTodo(todo));
+}
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  addTodo();
+});
+    </script>
+  </body>
+</html>
